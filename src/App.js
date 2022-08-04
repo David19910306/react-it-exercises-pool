@@ -1,11 +1,16 @@
-import LoginComponent from "./pages/login";
+import {Routes, Route} from 'react-router-dom'
+import routers from './router'
 
 function App() {
   return (
     <>
-      <LoginComponent/>
+      <Routes>
+        {
+          routers.map(route => <Route key={route.path} path={route.path} element={route.element }></Route>)
+        }
+      </Routes>
     </>
   );
 }
 
-export default App;
+export default App
