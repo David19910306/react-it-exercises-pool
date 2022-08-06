@@ -1,19 +1,27 @@
 import {lazy} from "react";
-import {Navigate} from 'react-router-dom'
 
+export const MainComponent = lazy(() => import("../pages"))
 export const RegisterComponent = lazy(() => import("../pages/register"))
 export const LoginComponent = lazy(() => import("../pages/login"))
 export const HomeComponent = lazy(() => import("../pages/home"))
+export const FastComponent = lazy(() => import("../pages/fast"))
+export const MineComponent = lazy(() => import("../pages/mine"))
 
 
 const routers = [
   {
     path: "/",
-    element: <Navigate to="/home" />
-  },
-  {
-    path: "/home",
-    element: <HomeComponent />
+    element: <MainComponent />,
+    children: [{
+      path: "/home",
+      element: <HomeComponent />
+    }, {
+      path: "/fast",
+      element: <FastComponent />
+    }, {
+      path: "/profile",
+      element: <MineComponent />
+    }]
   },
   {
     path: "/login",
