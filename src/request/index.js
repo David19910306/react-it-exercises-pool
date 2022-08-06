@@ -1,5 +1,4 @@
 import axios from 'axios'
-import Cookies from "js-cookie";
 
 const request = axios.create({
   withCredentials: true,
@@ -9,8 +8,9 @@ const request = axios.create({
 // 请求拦截
 request.interceptors.request.use(config => {
   // 判断登录时是否获取到token
-  if (Cookies.get('token')) {
-    config.headers = {token: `Cookies ${Cookies.get('token')}`}
+  const token = localStorage.getItem('x-auth-token')
+  if (token) {
+    config.headers = {"x-auth-token": token}
   }
   return config
 }, error => {
@@ -19,10 +19,12 @@ request.interceptors.request.use(config => {
 
 // 响应拦截
 request.interceptors.response.use(response => {
-  if (response.status === 200){
+  if (response.status === 200) {
     return response
   }
   return new Error(`数据获取失败，返回码：${response.status}`)
+}, error => {
+  return error.response
 })
 
 export default request

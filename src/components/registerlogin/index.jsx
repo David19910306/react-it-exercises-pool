@@ -1,57 +1,64 @@
-import React, {Component} from "react";
-import {Link} from "react-router-dom";
-import { Button } from 'antd-mobile'
+import React, {useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
+import {Button, Toast} from 'antd-mobile'
+import {ExclamationTriangleOutline} from "antd-mobile-icons";
+import httpRequest from '@/http'
 
 import './index.less'
 import logo from '@/assets/images/logo.png'
 
-export default class PubComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {username: '', password: ''}
-    this.onChangeHandler = this.onChangeHandler.bind(this)
-    this.onClickHandler = this.onClickHandler.bind(this)
-  }
+export default function PubComponent(props) {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate()
 
   // 受控组件
-  onChangeHandler(event) {
-    event.target.type === 'text'? this.setState({username: event.target.value}): this.setState({password: event.target.value})
+  function onChangeHandler(event) {
+    event.target.type === 'text'? setUsername(event.target.value): setPassword(event.target.value)
   }
 
   // 登录或注册
-  onClickHandler(buttonName){
-    const {username, password} = this.state
-    console.log(/^[1][3,4,5,6,7,8,9][0-9]{9}/.test(username))
-    if (buttonName === "直接登录"){
-
-    }else {
-      console.log(buttonName, 'p')
+  function onClickHandler(buttonName){
+    return async function(){
+      if (buttonName === "直接登录") {
+        const result = await httpRequest('/api/foo/1024/login', 'POST', null, {username, password})
+        const {data} = result
+        // token存到localStorage中
+        localStorage.setItem('x-auth-token', data.data)
+        showToastMessage(data, "登录成功", "/home")
+      }else{
+        const result = await httpRequest('/api/foo/1024/register', 'POST', null, {phone:username, password})
+        const {data} = result
+        showToastMessage(data, "注册成功", "/login")
+      }
     }
   }
 
-  render() {
-    const {pageName, buttonName, text, children} = this.props
-    return (
-      <div className="login-container">
-        <section className="image-section">
-          <img src={logo} alt="logo"/>
-        </section>
-        <h2>{pageName}</h2>
-        <form className="login-form">
-          <input className="input-field" type="text" placeholder="请输入手机号" onChange={this.onChangeHandler} />
-          <input className="input-field" type="password" placeholder="请输入密码" onChange={this.onChangeHandler} />
-          <Button
-            style={{'--background-color': "#02369D", fontSize: ".18rem", width: "88%", "--text-color": "#fff", height: ".5rem"}}
-            onClick={() => {this.onClickHandler(buttonName)}}>
-            {buttonName}
-          </Button>
-          <div className="form-tail">
-            <Link to={text === "前往注册"? "/register": "/login"}><span className="register">{text}</span></Link>
-            {children}
-          </div>
-        </form>
-        <section className="copyright">Copyright © 你单排吧</section>
-      </div>
-    )
+  function showToastMessage(data, message, destination){
+    Toast.show({content: data.errCode === 0? message: data.message, icon: data.errCode === 0? "success": <ExclamationTriangleOutline />})
+    data.errCode === 0 && navigate(destination)
   }
+
+  return (
+    <div className="login-container">
+      <section className="image-section">
+        <img src={logo} alt="logo"/>
+      </section>
+      <h2>{props.pageName}</h2>
+      <form className="login-form">
+        <input className="input-field" type="text" placeholder="请输入手机号" onChange={onChangeHandler} />
+        <input className="input-field" type="password" placeholder="请输入密码" onChange={onChangeHandler} />
+        <Button
+          style={{'--background-color': "#02369D", fontSize: ".18rem", width: "88%", "--text-color": "#fff", height: ".5rem"}}
+          onClick={onClickHandler(props.buttonName)}>
+          {props.buttonName}
+        </Button>
+        <div className="form-tail">
+          <Link to={props.text === "前往注册"? "/register": "/login"}><span className="register">{props.text}</span></Link>
+          {props.children}
+        </div>
+      </form>
+      <section className="copyright">Copyright © 你单排吧</section>
+    </div>
+  )
 }
