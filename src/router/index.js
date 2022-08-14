@@ -1,11 +1,12 @@
 import {lazy} from "react";
 
-export const MainComponent = lazy(() => import("../pages"))
-export const RegisterComponent = lazy(() => import("../pages/register"))
-export const LoginComponent = lazy(() => import("../pages/login"))
-export const HomeComponent = lazy(() => import("../pages/home"))
-export const FastComponent = lazy(() => import("../pages/fast"))
-export const MineComponent = lazy(() => import("../pages/mine"))
+const MainComponent = lazy(() => import("../pages"))
+const RegisterComponent = lazy(() => import("../pages/register"))
+const LoginComponent = lazy(() => import("../pages/login"))
+const HomeComponent = lazy(() => import("../pages/home"))
+const FastComponent = lazy(() => import("../pages/fast"))
+const MineComponent = lazy(() => import("../pages/mine"))
+const ToggleComponent = lazy(() => import("../pages/toggle"))
 
 const routers = [
   {
@@ -29,6 +30,10 @@ const routers = [
   {
     path: "/register",
     element: <RegisterComponent />
+  },
+  {
+    path: "/toggle",
+    element: <ToggleComponent />
   }
 ]
 

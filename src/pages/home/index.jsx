@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import {Link} from "react-router-dom";
-import {DownFill} from "antd-mobile-icons";
-import {Button} from "antd-mobile";
+import {DownFill, ExclamationTriangleOutline} from "antd-mobile-icons";
+import {Button, Toast} from "antd-mobile";
+import httpRequest from "@/http";
+import withNavigation from "@/components/withNavigation";
 
 import contentImage from "@/assets/images/home/xiaolang.png"
 import examinationImage from "@/assets/images/home/examination.png"
@@ -9,9 +11,8 @@ import booksImage from "@/assets/images/home/books.png"
 import practiceImage from "@/assets/images/home/practice.png"
 import subjectIcon from "@/assets/images/home/subject.png"
 import "./index.less"
-import httpRequest from "@/http";
 
-export default class HomeComponent extends Component{
+class HomeComponent extends Component{
   constructor(props) {
     super(props);
     this.state = {exam: {}, exemItems: [], collect: 0, study: 0, wrong: 0}
@@ -19,25 +20,28 @@ export default class HomeComponent extends Component{
 
   // 组件挂载
   async componentDidMount() {
-    const result = await httpRequest('/api/foo/6666', 'GET', {actionCode: 1334411120332562433})
-    result.status === 200 && this.setState(state => ({
-      exam: result.data.data.exam,
-      exemItems: result.data.data.exemItems,
-      collect: result.data.data.collect,
-      study: result.data.data.study,
-      wrong: result.data.data.wrong
-    }))
-
+    const result = await httpRequest('/api/foo/6666', 'GET')
+    if(result.status === 200) {
+      this.setState(state => ({
+        exam: result.data.data.exam,
+        exemItems: result.data.data.exemItems,
+        collect: result.data.data.collect,
+        study: result.data.data.study,
+        wrong: result.data.data.wrong
+      }))
+    }else if(result.status === 500 && result.data.errCode === 1002){ // 当返回的是1002则重新登录
+      Toast.show({content: result.data.message, icon: <ExclamationTriangleOutline />})
+      setTimeout(() => {this.props.navigate("/login")}, 1000)
+    }
   }
 
   render(){
     const {exam, exemItems, collect, study, wrong} = this.state
     return (
-
       <div className="main-container">
           <header className="header-subject">
             <h2 className="subject">{exam.title}</h2>
-            <Link to="/">
+            <Link to="/toggle">
               <b className="change-subject">切换考试科目</b>
               <span><DownFill className="down-right" color="#2E57FF" /></span>
             </Link>
@@ -98,3 +102,5 @@ export default class HomeComponent extends Component{
     )
   }
 }
+
+export default withNavigation(HomeComponent)
