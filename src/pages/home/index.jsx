@@ -1,8 +1,13 @@
 import React, { Component } from "react";
 import {Link} from "react-router-dom";
 import {DownFill} from "antd-mobile-icons";
+import {Button} from "antd-mobile";
 
-import contentImage from "../../assets/images/home/xiaolang.png"
+import contentImage from "@/assets/images/home/xiaolang.png"
+import examinationImage from "@/assets/images/home/examination.png"
+import booksImage from "@/assets/images/home/books.png"
+import practiceImage from "@/assets/images/home/practice.png"
+import subjectIcon from "@/assets/images/home/subject.png"
 import "./index.less"
 
 export default class HomeComponent extends Component{
@@ -42,6 +47,76 @@ export default class HomeComponent extends Component{
             </div>
           </section>
         </section>
+        <section className='class-pages'>
+          <div className="image-container">
+            <img src={examinationImage} alt=""/>
+          </div>
+          <div className="image-container">
+            <img src={booksImage} alt=""/>
+          </div>
+          <div className="image-container">
+            <img src={practiceImage} alt=""/>
+          </div>
+        </section>
+        <div className="subject-title">
+          学科主题
+        </div>
+        <ul className="list">
+          <li>
+            <img className="left" src={subjectIcon} alt="" />
+            <section className="center">
+              <h3 className="title">基础面试题</h3>
+              <span className="number">24题/24题</span>
+              <div className="line"></div>
+            </section>
+            <Button size="small" color="primary">练习</Button>
+          </li>
+          <li>
+            <img className="left" src={subjectIcon} alt="" />
+            <section className="center">
+              <h3 className="title">基础面试题</h3>
+              <span className="number">24题/24题</span>
+              <div className="line"></div>
+            </section>
+            <Button size="small" color="primary">练习</Button>
+          </li>
+          <li>
+            <img className="left" src={subjectIcon} alt="" />
+            <section className="center">
+              <h3 className="title">基础面试题</h3>
+              <span className="number">24题/24题</span>
+              <div className="line"></div>
+            </section>
+            <Button size="small" color="primary">练习</Button>
+          </li>
+          <li>
+            <img className="left" src={subjectIcon} alt="" />
+            <section className="center">
+              <h3 className="title">基础面试题</h3>
+              <span className="number">24题/24题</span>
+              <div className="line"></div>
+            </section>
+            <Button size="small" color="primary">练习</Button>
+          </li>
+          <li>
+            <img className="left" src={subjectIcon} alt="" />
+            <section className="center">
+              <h3 className="title">基础面试题</h3>
+              <span className="number">24题/24题</span>
+              <div className="line"></div>
+            </section>
+            <Button size="small" color="primary">练习</Button>
+          </li>
+          <li>
+            <img className="left" src={subjectIcon} alt="" />
+            <section className="center">
+              <h3 className="title">基础面试题</h3>
+              <span className="number">24题/24题</span>
+              <div className="line"></div>
+            </section>
+            <Button size="small" color="primary">练习</Button>
+          </li>
+        </ul>
       </div>
     )
   }
