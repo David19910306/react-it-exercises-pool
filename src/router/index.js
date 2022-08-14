@@ -7,7 +7,6 @@ export const HomeComponent = lazy(() => import("../pages/home"))
 export const FastComponent = lazy(() => import("../pages/fast"))
 export const MineComponent = lazy(() => import("../pages/mine"))
 
-
 const routers = [
   {
     path: "/",

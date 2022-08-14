@@ -3,6 +3,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {Button, Toast} from 'antd-mobile'
 import {ExclamationTriangleOutline} from "antd-mobile-icons";
 import httpRequest from '@/http'
+import {setToken} from "@/utils/storage";
 
 import './index.less'
 import logo from '@/assets/images/logo.png'
@@ -24,7 +25,7 @@ export default function PubComponent(props) {
         const result = await httpRequest('/api/foo/1024/login', 'POST', null, {username, password})
         const {data} = result
         // token存到localStorage中
-        localStorage.setItem('x-auth-token', data.data)
+        setToken(data.data)
         showToastMessage(data, "登录成功", "/home")
       }else{
         const result = await httpRequest('/api/foo/1024/register', 'POST', null, {phone:username, password})

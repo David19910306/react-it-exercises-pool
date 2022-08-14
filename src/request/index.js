@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {getToken, hasToken, TOKEN_VALUE} from "../utils/storage";
 
 const request = axios.create({
   withCredentials: true,
@@ -8,9 +9,9 @@ const request = axios.create({
 // 请求拦截
 request.interceptors.request.use(config => {
   // 判断登录时是否获取到token
-  const token = localStorage.getItem('x-auth-token')
+  const token = hasToken()
   if (token) {
-    config.headers = {"x-auth-token": token}
+    config.headers = {[TOKEN_VALUE]: getToken()}
   }
   return config
 }, error => {
